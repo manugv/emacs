@@ -1,0 +1,10 @@
+/*
+
+# Files to not ignore
+!/.gitignore
+!/init.el
+
+# Folder to not ignore
+!/initfiles/
+
+*.*~
