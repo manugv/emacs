@@ -1,11 +1,13 @@
 # emacs-config
 my emacs config
 # Installation Issues
-## vterm for julia
-	- Install: libtool-bin, cmake
 
+## Install System packages (Linux)
+	- Install: libtool-bin, cmake for vterm
+	- Install fonts https://github.com/tonsky/FiraCode
+	
 ## Nerd-icons
-	- Run nerd-icons-install-font
+	- M-x nerd-icons-install-font
 
 ## Treesitter
 	- Install the grammer for different languages
