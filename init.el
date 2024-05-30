@@ -48,8 +48,8 @@
   (setq async-bytecomp-package-mode 1))
 
 ;; completion and icons in buffer
-(require 'initcompletion)
-(require 'initicons)			
+(require 'init-completion)
+(require 'init-icons)			
 
 ;; ledger mode
 (require 'init-ledger)
