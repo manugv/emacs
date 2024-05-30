@@ -19,4 +19,4 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-(provide 'initicons)
+(provide 'init-icons)

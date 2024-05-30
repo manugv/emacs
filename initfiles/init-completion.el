@@ -146,4 +146,4 @@ auto-completion."
 
 (add-hook 'text-mode-hook #'text-specific-corfu-mode)
 
-(provide 'initcompletion)
+(provide 'init-completion)
