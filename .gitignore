@@ -3,6 +3,7 @@
 # Files to not ignore
 !/.gitignore
 !/init.el
+!/emacs.org
 
 # Folder to not ignore
 !/initfiles/
