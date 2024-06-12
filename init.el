@@ -4,13 +4,16 @@
       initial-scratch-message nil)
 
 ;; Disable the menu bar
-;;(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 
 ;; Disable the tool bar
 (tool-bar-mode -1)
 
 ;; Disable the scroll bars
 (scroll-bar-mode -1)
+
+;; enable smooth scrolling
+(pixel-scroll-precision-mode 1)
 
 ;; prefer utf-8
 ;; UTF-8 all the way
@@ -20,12 +23,11 @@
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment 'utf-8)
 
-;; When files change on disk, update the buffer automatically:
+;; When files change on disk, update the buffer automatically
 (global-auto-revert-mode t)
 
 ;; Load path for manually installed packages
 (add-to-list 'load-path "~/.config/emacs/initfiles/")
-
 
 ;; look and theme
 (require 'init-look)
@@ -33,6 +35,9 @@
 ;;;========================================
 ;; PACKAGE Management
 ;;;========================================
+;; update built-in packages too. Was mainly used to fix eldoc 
+(setq package-install-upgrade-built-in t)
+
 (setq load-prefer-newer t)
 (eval-and-compile
   (require 'package)
@@ -50,6 +55,15 @@
 ;; completion and icons in buffer
 (require 'init-completion)
 (require 'init-icons)			
+
+;; eglot
+(require 'init-eglot)
+
+;; Manage enviornments using direnv
+;; install direnv on desktop
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
 
 ;; ledger mode
 (require 'init-ledger)
@@ -80,6 +94,15 @@
   :defer t
   :config
   (setq markdown-fontify-code-blocks-natively t))
+
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (julia . t)
+   (latex . t)
+   (shell . t)
+   ))
 
 ;;;========================================
 ;; show all remaining key combinations when doing multi-key commands
