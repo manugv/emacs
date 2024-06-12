@@ -23,8 +23,8 @@
   ;;     (insert out)))
   )
 
-(use-package flycheck-ledger
-  :ensure t
-  :after ledger-mode)
+;; (use-package flycheck-ledger
+;;   :ensure t
+;;   :after ledger-mode)
 
 (provide 'init-ledger) 
