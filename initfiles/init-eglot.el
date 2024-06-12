@@ -6,6 +6,7 @@
 (use-package eglot
   :defer t
   :init
+  ;; https://github.com/minad/corfu/wiki
   (setq completion-category-overrides '((eglot (styles orderless))
 					(eglot-capf (styles orderless))))
   ;; :config

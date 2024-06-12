@@ -12,9 +12,6 @@
   :mode ("\\.rs\\'" . rust-ts-mode)
   :after (eglot)
   :hook ((rust-ts-mode . eglot-ensure))
- 
-	 ;; (rust-ts-mode . (lambda ()
-	 ;; 		   (eglot-inlay-hints-mode -1))))
   :config
   (add-to-list 'eglot-server-programs  '((rust-ts-mode rust-mode) .
 		 ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))

@@ -13,6 +13,7 @@
                               (t . (monochrome)))
       modus-themes-hl-line '(nil)
       modus-themes-links '(nil)
+      ;; can use mixed fonts
       modus-themes-mixed-fonts t
       modus-themes-mode-line '(borderless accented)
       modus-themes-prompts '(background)
