@@ -15,8 +15,8 @@
 
 ;;--------------------------------------------------------------------
 
-(use-package auctex
-  :ensure t
+(use-package tex
+  :ensure auctex
   :mode ("\\.tex\\'" . latex-mode)
   :config
   (setq TeX-auto-save t
@@ -38,6 +38,6 @@
 		    )
   )
 
-;;(setq reftex-plug-into-AUCTeX t)
+
 (provide 'init-tex)
 
