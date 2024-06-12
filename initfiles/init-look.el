@@ -13,9 +13,8 @@
                               (t . (monochrome)))
       modus-themes-hl-line '(nil)
       modus-themes-links '(nil)
-      modus-themes-mixed-fonts nil
+      modus-themes-mixed-fonts t
       modus-themes-mode-line '(borderless accented)
-      modus-themes-tabs-accented t
       modus-themes-prompts '(background)
       modus-themes-region '(accented bg-only)
       modus-themes-syntax '(faint)
@@ -29,9 +28,25 @@
         (habit . traffic-light)))
 
 ;; Load the theme of your choice.
-(load-theme 'modus-operandi)
+(load-theme 'modus-vivendi)
 ;; Optionally define a key to switch between Modus themes.  Also check
 ;; the user option `modus-themes-to-toggle'.
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+
+
+(set-face-attribute 'default nil
+		    :family "Fira Code Retina"
+		    :height 130
+		    :weight 'regular
+		    )
+(set-face-attribute 'variable-pitch nil
+ 		    :family "JetBrains Mono"
+		    :height 125
+		    :weight 'regular)
+(set-face-attribute 'fixed-pitch nil
+		    :family "Fira Code"
+		    :height 125
+		    :weight 'regular)
+(add-hook 'text-mode-hook #'variable-pitch-mode)
 
 (provide 'init-look)
