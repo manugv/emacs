@@ -63,7 +63,7 @@
 ;; install direnv on desktop
 (use-package envrc
   :ensure t
-  :hook (after-init . envrc-global-mode))
+  :hook (prog-mode . envrc-mode))
 
 ;; ledger mode
 (require 'init-ledger)

@@ -33,7 +33,7 @@
 			(visual-line-mode t)
 			(turn-on-auto-fill)             ; LaTeX mode，turn off auto fold)
 			(auto-fill-mode 1)
-			(define-key LaTeX-mode-map (kbd "TAB") 'TeX-complete-symbol)
+			;;(define-key LaTeX-mode-map (kbd "TAB") 'TeX-complete-symbol)
 			)
 		    )
   )
