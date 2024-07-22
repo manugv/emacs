@@ -68,17 +68,16 @@
 ;; ledger mode
 (require 'init-ledger)
 
-;; ;; Python mode
+;; Python mode
 (require 'init-python)
 
-;; ;; Julia mode
+;; Julia mode
 (require 'init-juliamode)
 
-;; ;; rust mode
+;; rust mode
 (require 'init-rust)
 
-
-;; ;; latex mode
+;; latex mode
 (require 'init-tex)
 
 ;; Git
@@ -95,14 +94,9 @@
   :config
   (setq markdown-fontify-code-blocks-natively t))
 
+;; org mode
+(require 'init-org)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)
-   (julia . t)
-   (latex . t)
-   (shell . t)
-   ))
 
 ;;;========================================
 ;; show all remaining key combinations when doing multi-key commands
