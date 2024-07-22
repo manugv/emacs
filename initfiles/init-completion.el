@@ -67,21 +67,22 @@
   (corfu-auto nil)
   (corfu-auto-prefix 2)
   (corfu-auto-delay 0.0)
-  (corfu-popupinfo-delay '(1.0 . 0.5))
+  ;; (corfu-popupinfo-delay '(1.0 . 0.5))
   (corfu-scroll-margin 5)
   (corfu-preview-current nil) ; Do not preview current candidate
+  )
   ;; (corfu-preselect-first nil)
 
   ;; I also have (setq tab-always-indent 'complete) for TAB to complete
   ;; when it does not need to perform an indentation change.
-  :bind (:map corfu-map
-	      ("M-p" . corfu-popupinfo-scroll-down)
-              ("M-n" . corfu-popupinfo-scroll-up))
-  :config
-   ;; Sort by input history (no need to modify `corfu-sort-function').
-  (with-eval-after-load 'savehist
-    (corfu-history-mode 1)
-    (add-to-list 'savehist-additional-variables 'corfu-history)))
+  ;; :bind (:map corfu-map
+  ;; 	      ("M-p" . corfu-popupinfo-scroll-down)
+  ;;             ("M-n" . corfu-popupinfo-scroll-up))
+  ;; :config
+  ;;  ;; Sort by input history (no need to modify `corfu-sort-function').
+  ;; (with-eval-after-load 'savehist
+  ;;   (corfu-history-mode 1)
+  ;;   (add-to-list 'savehist-additional-variables 'corfu-history)))
 
 
 ;; Add extensions
