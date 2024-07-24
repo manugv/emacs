@@ -4,7 +4,7 @@
       initial-scratch-message nil)
 
 ;; Disable the menu bar
-;; (menu-bar-mode -1)
+(menu-bar-mode -1)
 
 ;; Disable the tool bar
 (tool-bar-mode -1)
@@ -56,14 +56,14 @@
 (require 'init-completion)
 (require 'init-icons)			
 
+;; buffers
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
 ;; eglot
 (require 'init-eglot)
 
 ;; Manage enviornments using direnv
-;; install direnv on desktop
-(use-package envrc
-  :ensure t
-  :hook (prog-mode . envrc-mode))
+(require 'init-envrc)
 
 ;; ledger mode
 (require 'init-ledger)
@@ -81,22 +81,13 @@
 (require 'init-tex)
 
 ;; Git
-(use-package magit
-  :ensure t
-  :config
-  :bind (("C-x g" . magit-status)
-         ("C-c M-g" . magit-file-popup)))
+(require 'init-git)
 
-;;; Markdown (markdown-mode)
-(use-package markdown-mode
-  :ensure t
-  :defer t
-  :config
-  (setq markdown-fontify-code-blocks-natively t))
+;; Markdown (markdown-mode)
+(require 'init-markdown)
 
 ;; org mode
 (require 'init-org)
-
 
 ;;;========================================
 ;; show all remaining key combinations when doing multi-key commands
