@@ -9,7 +9,8 @@
   :ensure t
   :config
   (setq vertico-cycle t
-	vertico-resize t)
+	vertico-resize nil
+	vertico-count 5)
   (vertico-mode 1))
 
 
