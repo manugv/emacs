@@ -7,8 +7,9 @@
   :defer t
   :init
   ;; https://github.com/minad/corfu/wiki
-  (setq completion-category-overrides '((eglot (styles orderless))
-					(eglot-capf (styles orderless))))
+  ;; (setq completion-category-overrides '((eglot (styles orderless))
+  ;; 					(eglot-capf (styles orderless)))
+  
   ;; :config
   ;; (add-to-list 'eglot-server-programs
   ;; 	       '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
