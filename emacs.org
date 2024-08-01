@@ -85,9 +85,8 @@
   (require 'init-completion)
   (require 'init-icons)			
 #+end_src
-- Vertico-Mode :: vertical layput in minibuffer
+- icomplete-vertical-mode :: vertical layput in minibuffer
 - marginalia :: annotations in the minibuffer
-- orderless :: pattern-matching in the minibuffer
 - corfu :: Completion popup ui in the buffer.
 - cape :: Completion At Point Extensions and bindings to complete.
 - nerd-icons :: Icons in emacs.
@@ -102,7 +101,6 @@
 - set-up eglot
 - Set up corfu with eglot for continuously updating the candidates: https://github.com/minad/corfu/wiki
 - set-up eldoc-box as eldoc used minibuffer or a frame to show documentation. And it does it continuously.
-
   
 ** Manage enviornments especially python using direnv
 1. Install direnv on the system. This is used to activate the env in a folder. (https://direnv.net/docs/installation.html)
