@@ -19,7 +19,7 @@
               ("C-c C-e" . eglot-rename)
               ("C-c C-f" . eglot-format-buffer)))
 
-;; (add-hook 'prog-mode-hook #'eglot-ensure)
+(add-hook 'prog-mode-hook #'eglot-ensure)
 
 ;; make eldoc to show in a line in minibuffer
 ;; (setq eldoc-echo-area-use-multiline-p nil)

@@ -87,11 +87,13 @@
   :custom
   (corfu-cycle t)
   (corfu-auto nil)
+  (corfu-separator ?\s)
+  (corfu-quit-no-match 'separator)
   (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.0)
-  ;; (corfu-popupinfo-delay '(1.0 . 0.5))
+  ;; (corfu-auto-delay 0.0)
+  (corfu-popupinfo-delay '(1.0 . 0.5))
   (corfu-scroll-margin 5)
-  (corfu-preview-current nil) ; Do not preview current candidate
+  ;;(corfu-preview-current nil) ; Do not preview current candidate
   )
   ;; (corfu-preselect-first nil)
 
@@ -112,42 +114,42 @@
   :ensure t
   ;; Bind dedicated completion commands
   ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  :bind (("M-p p" . completion-at-point) ;; capf
-         ("M-p t" . complete-tag)        ;; etags
-         ("M-p d" . cape-dabbrev)        ;; or dabbrev-completion
-         ("M-p h" . cape-history)
-         ("M-p f" . cape-file)
-         ("M-p k" . cape-keyword)
-         ("M-p s" . cape-elisp-symbol)
-         ("M-p e" . cape-elisp-block)
-         ("M-p a" . cape-abbrev)
-         ("M-p l" . cape-line)
-         ("M-p w" . cape-dict)
-         ("M-p :" . cape-emoji)
-         ("M-p \\" . cape-tex)
-         ("M-p _" . cape-tex)
-         ("M-p ^" . cape-tex)
-         ("M-p &" . cape-sgml)
-         ("M-p r" . cape-rfc1345)))
-;;   :init
-;;   ;; Add to the global default value of `completion-at-point-functions' which is
-;;   ;; used by `completion-at-point'.  The order of the functions matters, the
-;;   ;; first function returning a result wins.  Note that the list of buffer-local
-;;   ;; completion functions takes precedence over the global list.
-;;   ;; (add-hook 'completion-at-point-functions #'cape-dabbrev)
-;;   ;; (add-hook 'completion-at-point-functions #'cape-file)
-;;   ;; (add-hook 'completion-at-point-functions #'cape-elisp-block)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-history)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-keyword)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-tex)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-sgml)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-rfc1345)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-abbrev)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-dict)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-elisp-symbol)
-;;   ;;(add-hook 'completion-at-point-functions #'cape-line)
-
-;; )
+  :bind ("M-p" . cape-prefix-map) ;; Alternative keys: M-p, M-+, ...
+  ;; (("M-p p" . completion-at-point) ;; capf
+  ;;        ("M-p t" . complete-tag)        ;; etags
+  ;;        ("M-p d" . cape-dabbrev)        ;; or dabbrev-completion
+  ;;        ("M-p h" . cape-history)
+  ;;        ("M-p f" . cape-file)
+  ;;        ("M-p k" . cape-keyword)
+  ;;        ("M-p s" . cape-elisp-symbol)
+  ;;        ("M-p e" . cape-elisp-block)
+  ;;        ("M-p a" . cape-abbrev)
+  ;;        ("M-p l" . cape-line)
+  ;;        ("M-p w" . cape-dict)
+  ;;        ("M-p :" . cape-emoji)
+  ;;        ("M-p \\" . cape-tex)
+  ;;        ("M-p _" . cape-tex)
+  ;;        ("M-p ^" . cape-tex)
+  ;;        ("M-p &" . cape-sgml)
+  ;;        ("M-p r" . cape-rfc1345)))
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-hook 'completion-at-point-functions #'cape-history)
+  ;;(add-hook 'completion-at-point-functions #'cape-keyword)
+  ;;(add-hook 'completion-at-point-functions #'cape-tex)
+  ;;(add-hook 'completion-at-point-functions #'cape-sgml)
+  ;;(add-hook 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-hook 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-hook 'completion-at-point-functions #'cape-dict)
+  ;;(add-hook 'completion-at-point-functions #'cape-elisp-symbol)
+  ;;(add-hook 'completion-at-point-functions #'cape-line)
+)
 
 ;; (defun ma/cape-capf-setup-textmode ()
 ;;   (add-to-list 'completion-at-point-functions #'cape-dict)
@@ -157,16 +159,15 @@
 ;; ;; (defun cape-capf-setup-text ()
 ;; ;;   (add-to-list 'completion-at-point-functions ( #'company-shell)))
 
-(defun text-specific-corfu-mode ()
-  "Meant to be hooked onto `text-mode', enable `corfu-mode' without
-auto-completion."
-  (setq-local corfu-auto t
-	      corfu-auto-prefix 3
-	      completion-cycle-threshold 3)
-  (add-to-list 'completion-at-point-functions #'cape-dict)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file))
+;; (defun text-specific-corfu-mode ()
+;;   "Meant to be hooked onto `text-mode', enable `corfu-mode' without
+;; auto-completion."
+;;   (setq-local corfu-auto t
+;; 	      corfu-auto-prefix 3
+;; 	      completion-cycle-threshold 3)
+;;   (add-to-list 'completion-at-point-functions #'cape-dict)
+;;   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-(add-hook 'text-mode-hook #'text-specific-corfu-mode)
+;; (add-hook 'text-mode-hook #'text-specific-corfu-mode)
 
 (provide 'init-completion)

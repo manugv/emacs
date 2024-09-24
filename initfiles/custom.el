@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(icomplete-separator " * ")
  '(package-selected-packages
-   '(org-superstar bind-key eglot eldoc faceup flymake idlwave jsonrpc org project soap-client tramp use-package verilog-mode xref envrc yaml-mode which-key vterm rust-mode numpydoc nerd-icons-dired nerd-icons-corfu nerd-icons-completion marginalia magit ledger-mode julia-repl julia-mode eglot-jl corfu cargo cape auctex async))
+   '(org-superstar bind-key eglot eldoc faceup flymake idlwave jsonrpc org project soap-client tramp use-package verilog-mode xref envrc yaml-mode which-key vterm rust-mode numpydoc nerd-icons-dired nerd-icons-corfu nerd-icons-completion marginalia magit ledger-mode julia-repl julia-mode eglot-jl corfu cargo auctex async))
  '(tool-bar-mode nil))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
