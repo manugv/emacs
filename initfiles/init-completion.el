@@ -86,7 +86,7 @@
   ;; :after orderless marginalia vertico
   :custom
   (corfu-cycle t)
-  (corfu-auto nil)
+  (corfu-auto t)
   (corfu-separator ?\s)
   (corfu-quit-no-match 'separator)
   (corfu-auto-prefix 2)
