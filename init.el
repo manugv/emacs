@@ -12,9 +12,6 @@
 ;; Disable the scroll bars
 (scroll-bar-mode -1)
 
-;; enable smooth scrolling
-(pixel-scroll-precision-mode 1)
-
 ;; prefer utf-8
 ;; UTF-8 all the way
 (prefer-coding-system 'utf-8)
@@ -23,11 +20,19 @@
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment 'utf-8)
 
+;; highlight the line point
+(add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'text-mode-hook #'hl-line-mode)
+(add-hook 'org-mode-hook #'hl-line-mode)
+
 ;; When files change on disk, update the buffer automatically
 (global-auto-revert-mode t)
 
 ;; Load path for manually installed packages
 (add-to-list 'load-path "~/.config/emacs/initfiles/")
+
+;; (setq exec-path (append '("~/.local/bin/")
+;;                         exec-path))
 
 ;; look and theme
 (require 'init-look)
