@@ -4,25 +4,12 @@
  
 (use-package python
   :config
-  (setq python-indent-offset 4)
   ;; Python interactive shells
-   (setq python-shell-interpreter "ipython"
-    	 python-shell-interpreter-args "--simple-prompt")
-   (setq-default eglot-workspace-configuration
-		 '((:pylsp . (:configurationSources ["flake8"]
-			      :plugins (:flake8 (:enabled :json-false)
-					:black (:enabled :json-false :line_length 100 :cache_config t)
-					:mccabe (:enabled t  :threshold 15)
-					:pyflakes (:enabled :json-false)
-					:yapf (:enabled :json-false)
-					:pydocstyle (:enabled :json-false :convention "numpy")
-					:rope (:enabled :json-false)
-					:ruff (:enabled t :lineLength 100)
-					:pycodestyle (:enabled :json-false)
-					:autopep8 (:enabled :json-false))))))
-   :hook
-   (python-mode . hs-minor-mode)
-   )
+  ;; (setq python-shell-interpreter "ipython"
+  ;;  	 python-shell-interpreter-args "--simple-prompt")
+  :hook
+  (python-mode . hs-minor-mode))
+ 
 
 ;; numpy docstring for python
 (use-package numpydoc
@@ -34,6 +21,27 @@
 
 ;; Open  in tree sitter mode
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+;; language servers to use
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs
+;; 	       '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))))
+
+;; ruff server
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs
+;;                '((python-mode python-ts-mode) . ("ruff" "server"))))
+;;  (add-hook 'after-save-hook 'eglot-format))
+
+
+;; flymake ruff as eglot doesn't support multiple servers
+;; (use-package flymake-ruff
+;;   :ensure t
+;;   :hook (eglot-managed-mode . flymake-ruff-load))
+
+
+;; Automatically start eglot
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
+
 
 (provide 'init-python)
