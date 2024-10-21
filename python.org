@@ -1,0 +1,459 @@
+* Python LSP + package management in emacs
+- Package management
+  * Important aspects 
+    * Environment management (which is mostly concerned with virtual environments): A tool that can perform environment management allows you to create and manage (virtual) environments.
+    * Package management: A tool that can perform package management is able to download and install libraries and their dependencies.
+    * Python version management: A tool that can perform Python version management allows you to install Python versions and switch between them easily.
+    * Package building: build the package
+    * Package publishing: in PyPi
+  * A good overview can be found in this link https://alpopkes.com/posts/python/packaging_tools/
+- LSP in emacs. What is needed?
+  - how does emacs know the right python location? (virtual enviornment)
+  - how to find the tools (lsp server, ruff and others) location? (tools location, proper */bin locations in $PATH)
+- New learnings    
+  * Jedi is responsible for auto-complete for multiple lsp servers (pylsp, pyright, jedi-language-server)
+  * ruff server doesn't do auto-complete so its missing a major feature.
+
+** What I need for my packages today
+- What I need
+- Package management
+- Enviornment management
+** Virtual Environments with Eglot, Tramp, and Pyright
+https://robbmann.io/posts/emacs-eglot-pyrightconfig/
+
+** Python package management uv + eglot in emacs with pylsp
+*** UV
+ - uv installs tools like pylsp and ruff into different enviornment. /This doesn't work with eglot. pylsp and ruff needs to be installed in the venv./
+ - creates the virtual enviornment in the project location.
+ - Tools are not installed in the same location to reduce the size of package management 
+*** DONE EGLOT : two things tools and virtual enviornment
+- LSP server settings
+  - Add the dir-locals.el file to define the linters and formatters.
+  - These tools (linters, formatters) need to be in the path of emacs to start eglot. To ensure that there are two options.
+    1) Start emacs from the terminal as it uses all the bash $path and uv tools are installed in .local/bin
+    2) Add .local/bin to .profile to start non-interactive emacs so that the .local/bin is in the path
+
+ - Virtual enviornment location needs to defined as the tools are not installed in the venv.
+   - venv is created in the project directory
+   - envrc manages the venv location. direnv needs to installed.
+   - A file needs to created in the project directory.
+
+* EMACS configuration
+1. Select a language server protocol client. Few are
+   - eglot: Inbuilt
+   - lsp-mode: has all features of LSP. Some features of emacs.
+   - lsp-bridge: multi-threaded along with own completion framework. Everything outside emacs
+2. Install language servers. For example
+   - pylsp, ruff, pyright, basedpyright
+   - Autocompletion, renaming, formatting, linting (errors, complexity checking, style checking, docstring), static type checking, refactoring
+3. Get LSP client to use one of the servers.
+   - Installation location of the servers is important. Emacs can be started in non-interactive env so bash $PATH is not accessed. Set proper access to */bin locations in emacs. Adding path to ~/.profile file can help as it is processed.
+4. Project management
+   1) Use one of the tools like uv, PDM or poetry
+   2) Create virtual enviornment
+   3) Set virtual enviornment such that it is read by emacs and language server.
+      1. using package envrc: use direnv. This sets the enviornments in the directory. It works on all servers.
+      2. Can also be defined in pyproject.toml if using basedpyright, pyright.
+         #+NAME: pyproject.toml
+         #+begin_src toml
+           [tool.p	yright]			
+           exclude = [ ".venv" ]
+           venvPath = "./"
+           venv = ".venv"
+           typeCheckingMode = "standard"
+           #+end_src
+   4) Set the inputs to the language server in the pyproject.toml file.
+      
+** EGLOT with pylsp, uv and envrc
+Three config files need to be created
+*** Create virtual enviornment and way to access it in emacs
+- Create a project using uv. This creates a .venv folder with virtual enviornment.
+- envrc is used to specify virtual enviornment for emacs per project.
+  #+NAME: .envrc config file in project folder.
+  #+begin_src sh
+    export VIRTUAL_ENV=/home/manu/Documents/CODE/python/homogenizer/.venv
+    layout python
+  #+end_src
+
+*** Install the pylsp language server and its plugins
+- Install pylsp using uv
+  #+begin_src sh
+    uv tool install python-lsp-server
+  #+end_src
+  - More details can be found in https://github.com/python-lsp/python-lsp-server.
+  - FYI: Jedi in pylsp does the autocompletion.
+- Install plugin *ruff* and *python-lsp-ruff* for fast linting and formatting.
+  #+begin_src sh
+    uv tool install add ruff
+    uv pip install python-lsp-ruff  ;; this is a weird way to do this.
+  #+end_src
+- uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
+  - Add the path to .profile.
+  - The path is mainly ~/.local/bin
+*** User/Project specific configuration.
+- This is needed as pylsp has multiple plugins and which plugins need to be used have to specified.
+- Here we define what all help/components we need from /Autocompletion, renaming, formatting, linting (errors, complexity checking, style checking, docstring), static type checking, refactoring/
+- All this can be specified in a config file ".dir-locals.el" as shown below.
+  #+NAME: dir-locals.el: A general one
+  #+BEGIN_SRC emacs-lisp :exports code
+    ;;; Directory Local Variables
+    ;;; For more information see (info "(emacs) Directory Variables")
+    ;;; Commentary:
+
+    ;; .dir-locals.el for use with the Emacs Eglot LSP client and
+    ;; python-lsp-server (pylsp) LSP server v1.10.0.
+
+    ;; Default values in accordance with
+    ;; https://github.com/python-lsp/python-lsp-server/blob/v1.10.0/CONFIGURATION.md
+    ;; (or commit 2a5a953).  A value of null means we do not set a value and
+    ;; therefore use the plugin's default value.
+
+    ;; The recommended format for the `eglot-workspace-configuration' variable
+    ;; value is a property list (plist for short):
+    ;;
+    ;; (:server plist…)
+    ;;
+    ;; Here :server identifies a particular language server and plist is the
+    ;; corresponding keyword-value property list of one or more parameter
+    ;; settings for that server, serialized by Eglot as a JSON object.
+    ;; plist may be arbitrarily complex, generally containing other
+    ;; keyword-value property sublists corresponding to JSON subobjects.
+
+    ;; The JSON values are represented by Emacs Lisp values as follows:
+
+    ;; JSON                         | Emacs Lisp
+    ;; ------------------------------------------------
+    ;; :true i.e. true              | t
+    ;; :false i.e. false            | :json-false
+    ;; :null i.e. null              | nil
+    ;; :[] i.e. [] the empty array  | []*
+    ;; :{} i.e. {} the empty object | eglot-{}**
+
+    ;; * Lisp array elements should not be comma separated as they are in a
+    ;; JSON array.
+    ;; ** Must be evaluated via a backquote or `list'
+    ;; e.g. `(:pylsp (:plugins (:jedi (:env_vars ,eglot-{})))) or
+    ;;       (list :pylsp (list :plugins (list :jedi (list :env_vars eglot-{}))))
+
+    ;;; How to Use:
+
+    ;; 1. Place this file in your project directory.
+    ;; 2. Adjust settings as desired.  Inline comments below indicate the
+    ;; expected type, possible values if appropriate and default pylsp value
+    ;; for each configuration setting.
+
+    ;;; Code:
+
+    ((python-mode
+      . ((eglot-workspace-configuration
+          . (:pylsp (:configurationSources ["flake8"] ; string array: ["flake8"] or ["pycodestyle"] (default)
+                                           :plugins (;; Note autopep uses some pycodestyle settings further down to avoid redefining things namely aggressive, exclude, hangClosing, ignore, maxLineLength and select
+                                                     :autopep8
+                                                     (:enabled :json-false) ; boolean: true (default) or false
+                                                     :flake8
+                                                     (:config nil ; string: null (default)
+                                                              :enabled :json-false ; boolean: true or false (default)
+                                                              :exclude [] ; string array: [] (default)
+                                                              :executable "flake8" ; string: "flake8" (default)
+                                                              :extendIgnore [] ; string array: [] (default)
+                                                              :filename nil ; string: null (default)
+                                                              :hangClosing nil ; boolean: true or false; null (default)
+                                                              :ignore [] ; string array: [] (default)
+                                                              :indentSize nil ; integer: null (default)
+                                                              :maxComplexity nil ; integer: null (default)
+                                                              :maxLineLength nil ; integer: null (default)
+                                                              :perFileIgnores [] ; string array: [] (default) e.g. ["file_path.py:W305,W304"]
+                                                              :select nil) ; string array: null (default)
+                                                     :jedi
+                                                     (:auto_import_modules ["numpy"] ; string array: ["numpy"] (default)
+                                                                           :env_vars nil ; object: null (default)
+                                                                           :environment nil ; string: null (default)
+                                                                           :extra_paths []) ; string array: [] (default)
+                                                     :jedi_completion
+                                                     (:cache_for ["pandas" "numpy" "tensorflow" "matplotlib"] ; string array: ["pandas", "numpy", "tensorflow", "matplotlib"] (default)
+                                                                 :eager :json-false ; boolean: true or false (default)
+                                                                 :enabled t ; boolean: true (default) or false
+                                                                 :fuzzy :json-false ; boolean: true or false (default)
+                                                                 :include_class_objects :json-false ; boolean: true or false (default)
+                                                                 :include_function_objects :json-false ; boolean: true or false (default)
+                                                                 :include_params t ; boolean: true (default) or false
+                                                                 :resolve_at_most 25) ; integer: 25 (default)
+                                                     :jedi_definition
+                                                     (:enabled t ; boolean: true (default) or false
+                                                               :follow_builtin_definitions t ; boolean: true (default) or false
+                                                               :follow_builtin_imports t ; boolean: true (default) or false
+                                                               :follow_imports t) ; boolean: true (default) or false
+                                                     :jedit_hover
+                                                     (:enabled t) ; boolean: true (default) or false
+                                                     :jedi_references
+                                                     (:enabled t) ; boolean: true (default) or false
+                                                     :jedi_signature_help
+                                                     (:enabled t) ; boolean: true (default) or false
+                                                     :jedi_symbols
+                                                     (:all_scopes t ; boolean: true (default) or false
+                                                                  :enabled t ; boolean: true (default) or false
+                                                                  :include_import_symbols t) ; boolean: true (default) or false
+                                                     :mccabe
+                                                     (:enabled t ; boolean: true (default) or false
+                                                               :threshold 15) ; integer: 15 (default)
+                                                     :preload
+                                                     (:enabled t ; boolean: true (default) or false
+                                                               :modules []) ; string array: [] (default)
+                                                     :pycodestyle
+                                                     (:enabled t ; boolean: true (default) or false
+                                                               :exclude [] ; string array: [] (default)
+                                                               :filename [] ; string array: [] (default)
+                                                               :hangClosing nil ; boolean: true or false; null (default)
+                                                               :ignore [] ; string array: [] (default)
+                                                               :indentSize nil ; integer: null (default)
+                                                               :maxLineLength nil ; integer: null (default)
+                                                               :select nil) ; string array: null (default)
+                                                     :pydocstyle
+                                                     (:addIgnore [] ; string array: [] (default)
+                                                                 :addSelect [] ; string array: [] (default)
+                                                                 :convention nil ; string: "google", "numpy" or "pep257"; null (default)
+                                                                 :enabled :json-false ; boolean: true or false (default)
+                                                                 :ignore [] ; string array: [] (default)
+                                                                 :match "(?!test_).*\\.py" ; string: "(?!test_).*\\.py" (default)
+                                                                 :matchDir "[^\\.].*" ; string: "[^\\.].*" (default)
+                                                                 :select nil) ; string array: null (default)
+                                                     :pyflakes
+                                                     (:enabled t) ; boolean: true (default) or false
+                                                     :pylint
+                                                     (:args [] ; string array: [] (default)
+                                                            :enabled :json-false ; boolean: true or false (default)
+                                                            :executable nil) ; string: null (default)
+                                                     :rope_autoimport
+                                                     (:code_actions (:enabled t) ; boolean: true (default) or false
+                                                                    :completions (:enabled t) ; boolean: true (default) or false
+                                                                    :enabled :json-false ; boolean: true or false (default)
+                                                                    :memory :json-false) ; boolean: true or false (default)
+                                                     :rope_completion
+                                                     (:eager :json-false ; boolean: true or false (default)
+                                                             :enabled :json-false) ; boolean: true or false (default)
+                                                     :yapf
+                                                     (:enabled t)) ; boolean: true (default) or false
+                                           :rope
+                                           (:extensionModules nil ; string: null (default)
+                                                              :ropeFolder nil))))))) ; string array: null (default)
+  #+END_SRC
+- One specific configuration is shown below:
+  #+NAME: .dir-locals.el: One for the project
+  #+begin_src emacs-lisp
+    ((python-base-mode
+    . ((eglot-workspace-configuration
+        . (:pylsp (:configurationSources ["flake8"]
+                               :plugins (:flake8
+                                               (:enabled :json-false)
+                                               :black (:enabled :json-false :line_length 100 :cache_config t)
+                                               :mccabe (:enabled t  :threshold 15)
+                                               :pyflakes (:enabled :json-false)
+                                               :yapf (:enabled :json-false)
+                                               :pydocstyle (:enabled :json-false :convention "numpy")
+                                               :rope (:enabled :json-false)
+                                               :ruff (:enabled :json-false :lineLength 100)
+                                               :pycodestyle (:enabled :json-false)
+                                               :autopep8 (:enabled :json-false))))))))
+  #+end_src
+  Here only jedi (for autocompletion), ruff and mccabe are switched on. Further the inputs to the language server are defined in pyproject.toml.
+  
+*** Inputs to the language server.
+- Here define on how the code needs to formatted or what linters need to be used and others.
+- An example using ruff linter is given as follows
+  #+begin_src toml
+    [tool.ruff]
+    line-length = 120
+    indent-width = 4
+    extend-exclude = ["tests", "examples"]
+    [tool.ruff.lint]
+    # Add "Q" to the list of enabled codes.
+    select = ["E4", "E7", "E9", "F", "Q"]
+    # ignore = ["E501"]
+    [tool.ruff.lint.flake8-quotes]
+    docstring-quotes = "double"
+    # [tool.ruff.flake8-quotes]
+    # docstring-quotes = "single"
+    [tool.ruff.format]
+    # Format all docstring code snippets with a line length of 60.
+    docstring-code-line-length = 80
+    # magic trailing commas.
+    skip-magic-trailing-comma = true
+    # Like Black, use double quotes for strings.
+    quote-style = "double"
+    # Like Black, indent with spaces, rather than tabs.
+    indent-style = "space"
+    # [tool.ruff.pydocstyle]
+    # convention = "numpy"  # "google" | "numpy" | "pep257"
+  #+end_src
+- Details for this can be found in https://docs.astral.sh/ruff/configuration/#config-file-discovery
+
+*** /ISSUES/
+- Language servers installed in venv (even the langauge server) for eglot to work properly. (different from mentioned above where uv installs them in a different enviornment.
+- When using uv tools, there is an issue with installing python-ruff-lsp plugin.
+  - pip has to be used to install ruff plugin and everything work after that.
+  
+** EGLOT with basedpyright and flymake-ruff
+Three config files need to be created
+*** Create virtual enviornment and way to access it in emacs
+- Create a project using uv. This creates a .venv folder with virtual enviornment.
+- Two ways  virtual enviornment can be defined
+  1. envrc is used to specify virtual enviornment for emacs per project.
+     #+NAME: .envrc config file in project folder.
+     #+begin_src sh
+       export VIRTUAL_ENV=/home/manu/Documents/CODE/python/homogenizer/.venv
+       layout python
+     #+end_src
+  2. Virtual env can be defined inside the pyproject.toml file but its not a good idea as sharing the code can cause problems. The configuration is
+     #+NAME: pyproject.toml
+     #+begin_src toml
+       [tool.pyright]			
+       exclude = [ ".venv" ]
+       venvPath = "./"
+       venv = ".venv"
+     #+end_src
+    
+*** Install the basedpyright language server and ruff
+- Install basedpyright using uv
+  #+begin_src sh
+    uv tool install basedpyright
+  #+end_src
+  - More details can be found in https://docs.basedpyright.com/latest/installation/command-line-and-language-server/
+- Install *ruff* for fast linting and formatting.
+  #+begin_src sh
+    uv tool install ruff
+  #+end_src
+- uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
+  - Add the path to .profile.
+  - The path is mainly ~/.local/bin
+- Configure in emacs-lisp
+  - Add basedpyright to eglot
+    #+begin_src emacs-lisp
+      ;; language servers to use
+      (with-eval-after-load 'eglot
+        (add-to-list 'eglot-server-programs
+      	       '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))))
+    #+end_src
+  - Add flymake-ruff package to emacs. https://github.com/erickgnavar/flymake-ruff
+    #+begin_src emacs-lisp
+        ;; flymake ruff as eglot doesn't support multiple servers
+        (use-package flymake-ruff
+          :ensure t
+          :hook (eglot-managed-mode . flymake-ruff-load))
+    #+end_src
+  
+*** Inputs to the language server.
+- Here define on how the code needs to formatted or what linters need to be used and others.
+- An example using ruff linter and basedpyright is given as follows
+  #+begin_src toml
+      [tool.pyright]			
+      typeCheckingMode = "standard"
+
+      [tool.ruff]
+      line-length = 120
+      indent-width = 4
+      extend-exclude = ["tests", "examples"]
+      [tool.ruff.lint]
+      # Add "Q" to the list of enabled codes.
+      select = ["E4", "E7", "E9", "F", "Q"]
+      # ignore = ["E501"]
+      [tool.ruff.lint.flake8-quotes]
+      docstring-quotes = "double"
+      # [tool.ruff.flake8-quotes]
+      # docstring-quotes = "single"
+      [tool.ruff.format]
+      # Format all docstring code snippets with a line length of 60.
+      docstring-code-line-length = 80
+      # magic trailing commas.
+      skip-magic-trailing-comma = true
+      # Like Black, use double quotes for strings.
+      quote-style = "double"
+      # Like Black, indent with spaces, rather than tabs.
+      indent-style = "space"
+      # [tool.ruff.pydocstyle]
+      # convention = "numpy"  # "google" | "numpy" | "pep257"
+  #+end_src
+- Details for this can be found in https://docs.astral.sh/ruff/configuration/#config-file-discovery
+
+  - EGLOT should see the language-servers executable (tools) path.
+  - All the language servers can be configured per project using dir-locals.el file in the project directory.
+    - This file is read by the eglot and lsp works based on that.
+  - Per project configurations can be usage of different language servers and linters, formatters
+*** /ISSUES/
+- Virtual env works if envrc works if configured properly. Even with uv tool in different env.
+**** TODO venv in pyproject.toml
+- If the file is opened in emacs (non-interactive mode) then the python using C-c C-p is not necessarily the one from virtual enviornment.
+  - Using C-u C-c C-p and define the command as *uv run python3 -i* works
+  - Find some way to incorperate the uv commands into python-mode.
+- If the emacs is opened from the terminal then the C-c C-p also doesn't work as the virtual env is not selected properly.
+- However the completion algorithm and all work which makes it weird.
+ 
+** EGLOT with ruff server
+- Only linter and formatter are avaliable. No auto-completion and xref available.
+- Eglot doesn't support multiple lsp for a single project.
+*** Create virtual enviornment and way to access it in emacs
+- Create a project using uv. This creates a .venv folder with virtual enviornment.
+- envrc is used to specify virtual enviornment for emacs per project.
+  #+NAME: .envrc config file in project folder.
+  #+begin_src sh
+    export VIRTUAL_ENV=/home/manu/Documents/CODE/python/homogenizer/.venv
+    layout python
+  #+end_src
+*** Install the ruff language server
+- Install *ruff* for fast linting and formatting.
+  #+begin_src sh
+    uv tool install ruff
+  #+end_src
+- uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
+  - Add the path to .profile.
+  - The path is mainly ~/.local/bin
+- Configure in emacs-lisp
+  - Add ruff to eglot
+    #+begin_src emacs-lisp
+      ;; language servers to use
+      (with-eval-after-load 'eglot
+        (add-to-list 'eglot-server-programs
+      	       '((python-mode python-ts-mode) . ("ruff" "server"))))
+    #+end_src
+  
+*** Inputs to the language server.
+- Here define on how the code needs to formatted or what linters need to be used and others.
+- An example using ruff linter and basedpyright is given as follows
+  #+begin_src toml
+      [tool.ruff]
+      line-length = 120
+      indent-width = 4
+      extend-exclude = ["tests", "examples"]
+      [tool.ruff.lint]
+      # Add "Q" to the list of enabled codes.
+      select = ["E4", "E7", "E9", "F", "Q"]
+      # ignore = ["E501"]
+      [tool.ruff.lint.flake8-quotes]
+      docstring-quotes = "double"
+      # [tool.ruff.flake8-quotes]
+      # docstring-quotes = "single"
+      [tool.ruff.format]
+      # Format all docstring code snippets with a line length of 60.
+      docstring-code-line-length = 80
+      # magic trailing commas.
+      skip-magic-trailing-comma = true
+      # Like Black, use double quotes for strings.
+      quote-style = "double"
+      # Like Black, indent with spaces, rather than tabs.
+      indent-style = "space"
+      # [tool.ruff.pydocstyle]
+      # convention = "numpy"  # "google" | "numpy" | "pep257"
+  #+end_src
+- Details for this can be found in https://docs.astral.sh/ruff/configuration/#config-file-discovery
+
+
+  - EGLOT should see the language-servers executable (tools) path.
+  - All the language servers can be configured per project using dir-locals.el file in the project directory.
+    - This file is read by the eglot and lsp works based on that.
+  - Per project configurations can be usage of different language servers and linters, formatters
+*** TODO /ISSUES/
+- Maybe the python using C-c C-p is not necessarily the one from virtual enviornment.
+- Use C-u C-c C-p and define the command as *uv run python3 -i*
+- Find some way to incorperate the uv commands into python-mode.
+
+
+** LSP-Bridge
