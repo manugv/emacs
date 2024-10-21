@@ -13,20 +13,22 @@
   :after (eglot)
   :hook ((rust-ts-mode . eglot-ensure))
   :config
+  ;; add language servers
   (add-to-list 'eglot-server-programs  '((rust-ts-mode rust-mode) .
 		 ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
 
+;; ;; corfu mode automatic
+;; (defun rust-specific-corfu-mode ()
+;;   "Meant to be hooked onto `text-mode', enable `corfu-mode' without
+;; auto-completion."
+;;   (setq-local corfu-auto t
+;; 	      corfu-auto-prefix 3
+;; 	      completion-cycle-threshold 3))
 
-(defun rust-specific-corfu-mode ()
-  "Meant to be hooked onto `text-mode', enable `corfu-mode' without
-auto-completion."
-  (setq-local corfu-auto t
-	      corfu-auto-prefix 3
-	      completion-cycle-threshold 3))
-
-(add-hook 'rust-mode-hook #'rust-specific-corfu-mode)
+;; (add-hook 'rust-mode-hook #'rust-specific-corfu-mode)
 
 
+;; rust run the code
 (with-eval-after-load 'rust-mode
   (define-key rust-mode-map (kbd "C-r") 'my-cargo-run))
 
@@ -42,8 +44,6 @@ auto-completion."
     (comint-mode)
     (read-only-mode 0)
     (select-window run-win)
-    
-    )
-  )
+    ))
 
 (provide 'init-rust)
