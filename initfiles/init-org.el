@@ -11,6 +11,8 @@
 ;;(setq org-agenda-files '("~/Documents/Org"))
 (if (equal system-name "sunflower")
     (setq org-agenda-files  (directory-files-recursively "~/Documents/Org/TODO" "\\.org$")))
+(if (equal system-name "jasmine")
+    (setq org-agenda-files  (directory-files-recursively "~/Org/TODO" "\\.org$")))
 
 ;; Org syntax highlighting
 (setq org-src-fontify-natively t)
