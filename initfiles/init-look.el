@@ -3,6 +3,9 @@
 (use-package modus-themes
   :ensure t
   :config
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi-tinted)
+	modus-themes-mixed-fonts t)
+  
   ;; Load the theme of your choice.
   (load-theme 'modus-vivendi-tinted :no-confirm)
   (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
