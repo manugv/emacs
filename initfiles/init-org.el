@@ -30,17 +30,11 @@
 ;; record done time
 (setq org-log-done 'note)
 
-
+;; prettifying org mode.
 (use-package org-superstar
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
-;; (use-package org-modern
-;;   :ensure t)
-
-;; ;; (add-hook 'org-mode-hook 'org-modern-mode)
-;; ;; (add-hook 'org-agenda-finalize-hook 'org-modern-agenda)
-;; (with-eval-after-load 'org (global-org-modern-mode))
  
 (provide 'init-org)

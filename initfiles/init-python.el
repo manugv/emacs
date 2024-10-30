@@ -8,8 +8,7 @@
   ;; (setq python-shell-interpreter "ipython"
   ;;  	 python-shell-interpreter-args "--simple-prompt")
   :hook
-  (python-mode . hs-minor-mode))
- 
+  (python-mode . hs-minor-mode)) 
 
 ;; numpy docstring for python
 (use-package numpydoc
@@ -39,9 +38,7 @@
 ;;   :ensure t
 ;;   :hook (eglot-managed-mode . flymake-ruff-load))
 
-
 ;; Automatically start eglot
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
-
 
 (provide 'init-python)

@@ -1,3 +1,5 @@
+;; Taken from https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
+
 ;; The `vertico' package applies a vertical layout to the minibuffer.
 ;; It also pops up the minibuffer eagerly so we can see the available
 ;; options without further interactions.  This package is very fast
@@ -5,25 +7,24 @@
 ;; need to modify its behaviour.
 ;;
 ;; Further reading: https://protesilaos.com/emacs/dotemacs#h:cff33514-d3ac-4c16-a889-ea39d7346dc5
-;; (use-package vertico
-;;   :ensure t
-;;   :config
-;;   (setq vertico-cycle t
-;; 	vertico-resize nil
-;; 	vertico-count 5)
-;;   (vertico-mode 1))
+(use-package vertico
+  :ensure t
+  :config
+  (setq vertico-cycle t)
+  (setq vertico-resize nil)
+  (vertico-mode 1))
 
 ;; Fido (icomplete now includes fuzzy matching for M-x and other completions)
-(use-package icomplete
-  :demand t
-  :config
-  (add-hook 'icomplete-minibuffer-setup-hook
-	    (lambda () (setq-local max-mini-window-height 10)))
-  (setq-local completion-styles '(substring initials flex))
-  (fido-vertical-mode 1)
-  :bind (:map icomplete-fido-mode-map
-	      ("RET" . icomplete-fido-ret)
-	      ("TAB" . icomplete-force-complete)))
+;; (use-package icomplete
+;;   :demand t
+;;   :config
+;;   (add-hook 'icomplete-minibuffer-setup-hook
+;; 	    (lambda () (setq-local max-mini-window-height 10)))
+;;   (setq-local completion-styles '(substring initials flex))
+;;   (fido-vertical-mode 1)
+;;   :bind (:map icomplete-fido-mode-map
+;; 	      ("RET" . icomplete-fido-ret)
+;; 	      ("TAB" . icomplete-force-complete)))
 
 ;; The `marginalia' package provides helpful annotations next to
 ;; completion candidates in the minibuffer.  The information on
@@ -48,36 +49,37 @@
 ;; algorithms), but let us keep things simple.
 ;;
 ;; Further reading: https://protesilaos.com/emacs/dotemacs#h:7cc77fd0-8f98-4fc0-80be-48a758fcb6e2
-;; (use-package orderless
-;;   :ensure t
-;;   :config
-;;   (setq completion-styles '(orderless basic)))
-
-
-;; The built-in `savehist-mode' saves minibuffer histories.  Vert
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:25765797-27a5-431e-8aa4-cc890a6a913a
-(savehist-mode 1)
-
-;; The built-in `recentf-mode' keeps track of recently visited files.
-;; You can then access those through the `consult-buffer' interface or
-;; with `recentf-open'/`recentf-open-files'.
-;;
-;; I do not use this facility, because the files I care about are
-;; either in projects or are bookmarked.
-(use-package recentf
+(use-package orderless
+  :ensure t
   :config
-  (setq recentf-auto-cleanup 'never) ;; prevent issues with Tramp
-  (setq recentf-max-saved-items 100)
-  (setq recentf-max-menu-items 15)
-  (recentf-mode t)
-  (defun my/recentf-ido-find-file ()
-    "Find a recent file using ido."
-    (interactive)
-    (let ((file (completing-read "Choose recent file: " recentf-list nil t)))
-      (when file
-        (find-file file))))
-  
-  :bind ("C-x f" . my/recentf-ido-find-file))
+  (setq completion-styles '(orderless basic)))
+
+;; The `consult' package provides lots of commands that are enhanced
+;; variants of basic, built-in functionality.  One of the headline
+;; features of `consult' is its preview facility, where it shows in
+;; another Emacs window the context of what is currently matched in
+;; the minibuffer.  Here I define key bindings for some commands you
+;; may find useful.  The mnemonic for their prefix is "alternative
+;; search" (as opposed to the basic C-s or C-r keys).
+;;
+;; Further reading: https://protesilaos.com/emacs/dotemacs#h:22e97b4c-d88d-4deb-9ab3-f80631f9ff1d
+(use-package consult
+  :ensure t
+  :bind (;; A recursive grep
+         ("M-s M-g" . consult-grep)
+         ;; Search for files names recursively
+         ("M-s M-f" . consult-find)
+         ;; Search through the outline (headings) of the file
+         ("M-s M-o" . consult-outline)
+         ;; Search the current buffer
+         ("M-s M-l" . consult-line)
+         ;; Switch to another buffer, or bookmarked file, or recently
+         ;; opened file.
+         ("M-s M-b" . consult-buffer)))
+
+;;#####################################################################################
+;;  Buffer completion
+;;#####################################################################################
 
 ;;; Corfu (in-buffer completion popup)
 (use-package corfu
