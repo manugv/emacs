@@ -5,7 +5,13 @@
  ;; If there is more than one, they won't work right.
  '(icomplete-separator " * ")
  '(package-selected-packages
-   '(modtime-skip-mode erc modus-themes org-superstar bind-key eglot eldoc faceup flymake idlwave jsonrpc org project soap-client tramp use-package verilog-mode xref envrc yaml-mode which-key vterm rust-mode numpydoc nerd-icons-dired nerd-icons-corfu nerd-icons-completion marginalia magit julia-repl eglot-jl corfu cargo auctex async))
+   '(dashboard modtime-skip-mode erc modus-themes org-superstar bind-key eglot eldoc faceup flymake idlwave jsonrpc org project soap-client tramp use-package verilog-mode xref yaml-mode which-key vterm rust-mode numpydoc nerd-icons-dired nerd-icons-corfu nerd-icons-completion marginalia magit julia-repl eglot-jl corfu cargo auctex async))
+ '(safe-local-variable-values
+   '((org-fontify-done-headline . t)
+     (org-todo-keyword-faces
+      ("PROGRESS" . "dark goldenrod")
+      ("FAILED" :foreground "red" :strike-through t)
+      ("REJECTED" :foreground "red" :strike-through t))))
  '(tool-bar-mode nil))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
@@ -19,3 +25,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
