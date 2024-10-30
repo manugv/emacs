@@ -31,10 +31,7 @@
 ;; Load path for manually installed packages
 (add-to-list 'load-path "~/.config/emacs/initfiles/")
 
-;; (setq exec-path (append '("~/.local/bin/")
-;;                         exec-path))
-
-;; look and theme
+;; fonts, look and theme
 (require 'init-look)
 
 ;;;========================================
@@ -50,44 +47,18 @@
 			  package-archives
 			  '(("melpa" . "https://melpa.org/packages/")))))
 
-(require 'use-package)
-;;install packages asynchronously
-(use-package async
-  :ensure t
-  :config
-  (setq async-bytecomp-package-mode 1))
+;; history or recent files
+(require 'init-history)
 
 ;; completion and icons in buffer
 (require 'init-completion)
 (require 'init-icons)			
 
-;; dashboard
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-items '((recents   . 5)
-			  (projects  . 5) 
-                          (agenda    . 5))))
-;; (setq dashboard-startupify-list '(dashboard-insert-banner-title
-;;                                   dashboard-insert-navigator
-;;                                   '(dashboard-insert-newline 2)
-;;                                   dashboard-insert-footer))
-(setq dashboard-display-icons-p t)     ; display icons on both GUI and terminal
-(setq dashboard-icon-type 'nerd-icons) ; use `nerd-icons' package
-(setq dashboard-set-file-icons t)
-;;(setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-(setq dashboard-match-agenda-entry "TODO=\"TODO\"")
-(setq dashboard-agenda-sort-strategy '(time-up))
-
-;; buffers
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; start up screen dashboard
+(require 'init-startscreen)
 
 ;; eglot
 (require 'init-eglot)
-
-;; Manage enviornments using direnv
-;; (require 'init-envrc)
 
 ;; ledger mode
 (require 'init-ledger)
@@ -107,10 +78,10 @@
 ;; Git
 (require 'init-git)
 
-;; Markdown (markdown-mode)
+;; Markdown
 (require 'init-markdown)
 
-;; org mode
+;; Org mode
 (require 'init-org)
 
 ;;;========================================
@@ -119,12 +90,9 @@
 ;;;========================================
 (use-package which-key
   :ensure t
-  :config
-  (which-key-mode)
-  (which-key-setup-side-window-right))
+  :hook (after-init . which-key-mode))
 
 ;; Store automatic customisation options elsewhere
 (setq custom-file (locate-user-emacs-file "initfiles/custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
-(put 'upcase-region 'disabled nil)
