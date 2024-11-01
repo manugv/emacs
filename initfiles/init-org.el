@@ -25,10 +25,12 @@
 
 (with-eval-after-load 'org       
   (setq org-startup-indented t) ; Enable `org-indent-mode' by default
+  (add-to-list 'org-modules 'org-habit t) ;; load org habits
   )
 
-;; record done time
-(setq org-log-done 'note)
+
+;; include 
+;; (setq org-agenda-include-inactive-timestamps t)
 
 ;; prettifying org mode.
 (use-package org-superstar
