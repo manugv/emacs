@@ -454,3 +454,34 @@ Three config files need to be created
 
 
 ** LSP-Bridge
+
+
+* Python package management and emacs as ide
+** Package management
+- Install uv to manage packages
+- uv installs a venv in the python package
+** Emacs as IDE
+*** LSP tools
+- Use uv to install tools to install lsp configs
+    #+begin_src sh
+    uv tool install add ruff
+    uv tool install --with python-lsp-ruff python-lsp-server
+  #+end_src
+  1. ruff for linter and formatter
+  2. Jedi in pylsp for auto-completions
+  3. Ruff is a plugin for pylsp
+- uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
+  - Add the path to .profile.
+  - The path is mainly ~/.local/bin
+
+*** Virtual envs
+- For emacs to understand virtual enviornment, use envrc emacs package.
+- Create a .envrc file
+  #+NAME: .envrc config file in project folder.
+  #+begin_src sh
+    export VIRTUAL_ENV=project_path/.venv
+    layout python
+  #+end_src
+- direnv allow has to be run in the folder.
+
+

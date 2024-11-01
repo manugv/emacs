@@ -57,7 +57,8 @@
 ;; start up screen dashboard
 (require 'init-startscreen)
 
-;; eglot
+;; eglot + envrc
+(require 'init-envrc)
 (require 'init-eglot)
 
 ;; ledger mode
