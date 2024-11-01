@@ -56,7 +56,7 @@ https://robbmann.io/posts/emacs-eglot-pyrightconfig/
       2. Can also be defined in pyproject.toml if using basedpyright, pyright.
          #+NAME: pyproject.toml
          #+begin_src toml
-           [tool.p	yright]			
+           [tool.pyright]			
            exclude = [ ".venv" ]
            venvPath = "./"
            venv = ".venv"
@@ -76,17 +76,14 @@ Three config files need to be created
   #+end_src
 
 *** Install the pylsp language server and its plugins
-- Install pylsp using uv
+- Install pylsp + ruff + ruff plugin using uv
   #+begin_src sh
-    uv tool install python-lsp-server
+    uv tool install add ruff
+    uv tool install --with python-lsp-ruff python-lsp-server
   #+end_src
   - More details can be found in https://github.com/python-lsp/python-lsp-server.
   - FYI: Jedi in pylsp does the autocompletion.
-- Install plugin *ruff* and *python-lsp-ruff* for fast linting and formatting.
-  #+begin_src sh
-    uv tool install add ruff
-    uv pip install python-lsp-ruff  ;; this is a weird way to do this.
-  #+end_src
+  - Install plugin *ruff* for fast linting and formatting.
 - uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
   - Add the path to .profile.
   - The path is mainly ~/.local/bin
