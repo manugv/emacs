@@ -22,6 +22,10 @@
  		    :family "JetBrainsMono"
 		    :height 130
 		    :weight 'Regular)
+(set-face-attribute 'fixed-pitch nil
+		    :family "Fira Code Retina"
+		    :height 130
+		    :weight 'regular)
 
 ;; make the text mode to use variable pitch
 (add-hook 'text-mode-hook #'variable-pitch-mode)
