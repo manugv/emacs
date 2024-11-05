@@ -1,3 +1,12 @@
+(use-package org
+  :config 
+  ;; remove emphasis 
+  (setq org-hide-emphasis-markers t)
+  ;; Org syntax highlighting
+  (setq org-src-fontify-natively t)
+  (setq org-log-done 'time)
+  )
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
@@ -14,10 +23,7 @@
 (if (equal system-name "jasmine")
     (setq org-agenda-files  (directory-files-recursively "~/Org/TODO" "\\.org$")))
 
-;; remove emphasis 
-(setq org-hide-emphasis-markers t)
-;; Org syntax highlighting
-(setq org-src-fontify-natively t)
+
 ;; wrap words making a fixed width of column
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 ;; variable fonts
@@ -28,9 +34,6 @@
   (add-to-list 'org-modules 'org-habit t) ;; load org habits
   )
 
-
-;; include 
-;; (setq org-agenda-include-inactive-timestamps t)
 
 ;; prettifying org mode.
 (use-package org-superstar
