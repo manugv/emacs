@@ -14,17 +14,6 @@
   (setq vertico-resize nil)
   (vertico-mode 1))
 
-;; Fido (icomplete now includes fuzzy matching for M-x and other completions)
-;; (use-package icomplete
-;;   :demand t
-;;   :config
-;;   (add-hook 'icomplete-minibuffer-setup-hook
-;; 	    (lambda () (setq-local max-mini-window-height 10)))
-;;   (setq-local completion-styles '(substring initials flex))
-;;   (fido-vertical-mode 1)
-;;   :bind (:map icomplete-fido-mode-map
-;; 	      ("RET" . icomplete-fido-ret)
-;; 	      ("TAB" . icomplete-force-complete)))
 
 ;; The `marginalia' package provides helpful annotations next to
 ;; completion candidates in the minibuffer.  The information on
@@ -77,6 +66,37 @@
          ;; opened file.
          ("M-s M-b" . consult-buffer)))
 
+
+;; The `embark' package lets you target the thing or context at point
+;; and select an action to perform on it.  Use the `embark-act'
+;; command while over something to find relevant commands.
+;;
+;; When inside the minibuffer, `embark' can collect/export the
+;; contents to a fully fledged Emacs buffer.  The `embark-collect'
+;; command retains the original behaviour of the minibuffer, meaning
+;; that if you navigate over the candidate at hit RET, it will do what
+;; the minibuffer would have done.  In contrast, the `embark-export'
+;; command reads the metadata to figure out what category this is and
+;; places them in a buffer whose major mode is specialised for that
+;; type of content.  For example, when we are completing against
+;; files, the export will take us to a `dired-mode' buffer; when we
+;; preview the results of a grep, the export will put us in a
+;; `grep-mode' buffer.
+;;
+;; Further reading: https://protesilaos.com/emacs/dotemacs#h:61863da4-8739-42ae-a30f-6e9d686e1995
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export)))
+
+;; The `embark-consult' package is glue code to tie together `embark'
+;; and `consult'.
+(use-package embark-consult
+  :ensure t)
+
+
 ;;#####################################################################################
 ;;  Buffer completion
 ;;#####################################################################################
@@ -97,19 +117,6 @@
   (corfu-scroll-margin 5)
   ;;(corfu-preview-current nil) ; Do not preview current candidate
   )
-  ;; (corfu-preselect-first nil)
-
-  ;; I also have (setq tab-always-indent 'complete) for TAB to complete
-  ;; when it does not need to perform an indentation change.
-  ;; :bind (:map corfu-map
-  ;; 	      ("M-p" . corfu-popupinfo-scroll-down)
-  ;;             ("M-n" . corfu-popupinfo-scroll-up))
-  ;; :config
-  ;;  ;; Sort by input history (no need to modify `corfu-sort-function').
-  ;; (with-eval-after-load 'savehist
-  ;;   (corfu-history-mode 1)
-  ;;   (add-to-list 'savehist-additional-variables 'corfu-history)))
-
 
 ;; Add extensions
 (use-package cape
