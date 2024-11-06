@@ -22,7 +22,6 @@
 
 ;; Julia mode
 (use-package julia-mode
-  :ensure t
   :mode "\\.jl\\'"
   :interpreter ("julia" . julia-mode)
   :init (setenv "JULIA_NUM_THREADS" "4")  
@@ -34,7 +33,6 @@
   :ensure t
   :init
   (eglot-jl-init)
-  (setq eglot-jl-default-environment "~/.julia/environments/v1.10")
   (setq eglot-jl-julia-command "~/.juliaup/bin/julia"))
 
 
