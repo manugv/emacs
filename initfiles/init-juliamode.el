@@ -7,33 +7,29 @@
 (use-package vterm
     :ensure t)
 
+;; (use-package julia-snail
+;;   :ensure t
+;;   :hook (julia-mode . julia-snail-mode))
+
+
 ;; Julia REPL configuration
 (use-package julia-repl
   :ensure t
   :config
   ;; Set the terminal backend
-  (setq julia-repl-set-terminal-backend 'vterm)
-   ;; Keybindings for quickly sending code to the REPL
-  :bind (:map julia-repl-mode-map
-	      ("<C-RET>" . 'my/julia-repl-send-cell)
- 	      ("<M-RET>" . 'julia-repl-send-line)
- 	      ("<S-return>" . 'julia-repl-send-buffer)
-	      ))
-
-;; Julia mode
-(use-package julia-mode
-  :mode "\\.jl\\'"
-  :interpreter ("julia" . julia-mode)
-  :init (setenv "JULIA_NUM_THREADS" "4")  
-  :hook(	(julia-mode . julia-repl-mode)
-		(julia-mode . eglot-ensure)
-	))
+  (setq julia-repl-set-terminal-backend 'vterm))
 
 (use-package eglot-jl
   :ensure t
   :init
-  (eglot-jl-init)
-  (setq eglot-jl-julia-command "~/.juliaup/bin/julia"))
+  (eglot-jl-init))
 
+;; Julia mode
+(use-package julia-mode
+  :mode "\\.jl\\'"
+  :init (setenv "JULIA_NUM_THREADS" "4")  
+  :hook((julia-mode . julia-repl-mode)
+	(julia-mode . eglot-ensure)
+	))
 
 (provide 'init-juliamode)

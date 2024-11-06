@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(embark-consult embark which-key vterm vertico verilog-mode use-package tramp soap-client rust-mode org-superstar orderless numpydoc nerd-icons-ibuffer nerd-icons-dired nerd-icons-corfu nerd-icons-completion modus-themes modtime-skip-mode marginalia magit ledger-mode julia-repl julia-mode idlwave faceup erc envrc eglot-jl dashboard corfu consult cargo cape auctex async))
+   '(which-key vterm vertico verilog-mode use-package tramp soap-client rust-mode org-superstar orderless numpydoc nerd-icons-ibuffer nerd-icons-dired nerd-icons-corfu nerd-icons-completion modus-themes marginalia magit ledger-mode julia-mode idlwave faceup erc envrc embark-consult dashboard corfu cargo cape auctex async))
  '(safe-local-variable-values
    '((org-fontify-done-headline . t)
      (org-todo-keyword-faces
@@ -18,4 +18,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-

@@ -139,8 +139,12 @@
  #+begin_src elisp
    (require 'init-juliamode)
  #+end_src
+ #+begin_src sh
+   julia --project=path/to/eglot-jl/ path/to/eglot-jl/eglot-jl.jl
+ #+end_src
  - vterm :: install the following packages on the system before installing vterm on emacs
    - cmake, libtool-bin, libvterm/libvterm-devel
+ - Read this Julia workflow: https://modernjuliaworkflows.org/
  - julia-repl :: a minor mode for interacting with a Julia REPL running inside Emacs
  - julia-mode :: major mode for the Julia programming language.
  - eglot-jl :: loads support for the Julia language server into eglot and project.el
