@@ -8,9 +8,8 @@
 # Folder to not ignore
 !initfiles/
 !org-themes/
+
+# ignore files
 *.*~
-
 *.elc
-
-# ignore custom-file
 initfiles/custom.el
