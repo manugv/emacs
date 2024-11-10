@@ -11,3 +11,6 @@
 *.*~
 
 *.elc
+
+# ignore custom-file
+initfiles/custom.el
