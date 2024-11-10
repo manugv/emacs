@@ -6,8 +6,8 @@
 !/*.org
 
 # Folder to not ignore
-!/initfiles/
-
+!initfiles/
+!org-themes/
 *.*~
 
 *.elc
