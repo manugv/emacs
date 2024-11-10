@@ -94,6 +94,6 @@
   :hook (after-init . which-key-mode))
 
 ;; Store automatic customisation options elsewhere
-(setq custom-file (locate-user-emacs-file "initfiles/custom.el"))
+(setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))

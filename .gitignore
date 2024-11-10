@@ -6,10 +6,10 @@
 !/*.org
 
 # Folder to not ignore
-!initfiles/
 !org-themes/
+!initfiles/
 
 # ignore files
 *.*~
 *.elc
-initfiles/custom.el
+custom.el
