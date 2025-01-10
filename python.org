@@ -1,3 +1,5 @@
+#+SETUPFILE: /home/manu/.config/emacs/org-themes/readtheorg_inline/readtheorg_inline.theme
+
 * Python LSP + package management in emacs
 - Package management
   * Important aspects 
@@ -462,28 +464,39 @@ Three config files need to be created
 - uv installs a venv in the python package
 ** Emacs as IDE
 *** LSP tools
+- Note taken on [2025-01-07 Tue 11:31] \\
+  Way to install packages will be \\
+  uv tool install xyz --with a,b,c
+**** Installation and what they do.
 - Use uv to install tools to install lsp configs
     #+begin_src sh
       uv tool install add ruff
-      uv tool install --with python-lsp-ruff python-lsp-server
-      uv tool install --with pylsp-mypy python-lsp-server
+      uv tool install python-lsp-server --with python-lsp-ruff,pylsp-mypy
   #+end_src
   1. ruff for linter and formatter
   2. Jedi in pylsp for auto-completions
   3. Ruff is a plugin for pylsp
-  4. mypy is for type hints.
+  4. mypy is for type hints. To get it work use the following in pyproject.toml
+     #+begin_src toml
+       [tool.mypy]
+       python_executable = "project-dir/.venv/bin/python3"
+
+       [tool.pylsp-mypy]
+       enabled = true
+       live_mode = true
+       strict = true
+     #+end_src
 - uv installs the tools in separate enviornment. Thus make sure it is in the path of emacs.
   - Add the path to .profile.
   - The path is mainly ~/.local/bin
-
+    
 *** Virtual envs
 - For emacs to understand virtual enviornment, use envrc emacs package.
 - Create a .envrc file
   #+NAME: .envrc config file in project folder.
   #+begin_src sh
     export VIRTUAL_ENV=project_path/.venv
-    layout python
+    layout python3
   #+end_src
 - direnv allow has to be run in the folder.
-
-
+  
