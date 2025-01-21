@@ -470,7 +470,7 @@ Three config files need to be created
 **** Installation and what they do.
 - Use uv to install tools to install lsp configs
     #+begin_src sh
-      uv tool install add ruff
+      uv tool install ruff
       uv tool install python-lsp-server --with python-lsp-ruff,pylsp-mypy
   #+end_src
   1. ruff for linter and formatter

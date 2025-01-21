@@ -27,6 +27,8 @@
   ;; (setq org-agenda-files  (directory-files-recursively "~/Org/TODO" "\\.org$")))
 (if (equal system-name "jasmine")
     (setq org-agenda-files  (directory-files-recursively "~/Documents/git/Org/TODO/" "\\.org$")))
+(if (equal system-name "VITO")
+    (setq org-agenda-files  '("~/Documents/Org")))
 
 
 ;; wrap words making a fixed width of column
